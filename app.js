@@ -2,6 +2,11 @@
 //8/20/2016
 //SixthSense photo analysis API response
 var Clarifai = require('clarifai');
+var http = require("http");
+var url = require('url');
+
+var s;
+
 var keywords = ['laptop',
 				'computer',
 				'people',
@@ -13,8 +18,8 @@ var keywords = ['laptop',
 				'cup',
 				'desk',
 				'book',
-				'man',
-				'woman',
+				//'man',
+				//'woman',
 				'wall',
 				'chair',
 				'window',
@@ -99,15 +104,20 @@ Clarifai.initialize({
 
 Clarifai.getTagsByUrl(
 	//Image URL
-  'https://scontent.xx.fbcdn.net/v/t34.0-0/p206x206/14081328_10209729945946523_2020620020_n.jpg?_nc_ad=z-m&oh=9a0d28d6829552d25f05bbde81e1609d&oe=57BA1291'
+  'https://scontent.fdel1-1.fna.fbcdn.net/v/t35.0-12/14044899_1087745107986760_1250302854_o.jpg?oh=2ce31d85c32f147043d0412a1f0b8dba&oe=57B90294'
 ).then(
    function(response) {
     filter(response); //Select responses from API
     //Get sentence here
-    console.log(concat(words));
+  	s = concat(words);
     //displayall(response); //Display all responses from the API
   },
   function(err){
     console.log(err);
   }
 );
+
+http.createServer(function(request, response) {
+	response.writeHead(200, {'Content-Type': 'text/plain'});   
+    response.end(s);
+}).listen(3000);
